@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "459424890335",
+    "project_id": "platform-autotel",
+    "storage_bucket": "platform-autotel.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459424890335:android:6465cd260f4440868a186a",
+        "android_client_info": {
+          "package_name": "com.autotelplatform.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWuav43fwGc-QBiorhLhGOrX5uLFKtV_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459424890335:android:9106643f6dc0d7b08a186a",
+        "android_client_info": {
+          "package_name": "com.stars.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWuav43fwGc-QBiorhLhGOrX5uLFKtV_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
