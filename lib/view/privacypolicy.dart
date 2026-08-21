@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:pdfrx/pdfrx.dart';
 
 class PdfViewerScreen extends StatefulWidget {
   final String pdfAssetPath;
@@ -59,25 +59,23 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
                       style: const TextStyle(fontSize: 16, color: Colors.red),
                     ),
                   )
-                : SfPdfViewer.asset(
+                : PdfViewer.asset(
                     widget.pdfAssetPath,
-                    initialScrollOffset:
-                        const Offset(0, 0), // Start at top-left
-                    scrollDirection:
-                        PdfScrollDirection.vertical, // Vertical scroll
-                    pageLayoutMode:
-                        PdfPageLayoutMode.continuous, // Continuous scroll
-                    onDocumentLoadFailed: (details) {
-                      setState(() {
-                        _errorMessage =
-                            'Failed to load ${widget.title} PDF: ${details.description}';
-                      });
-                    },
-                    onDocumentLoaded: (details) {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                    },
+                    params: PdfViewerParams(
+                      onDocumentLoadFinished: (documentRef, succeeded) {
+                        if (succeeded) {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        } else {
+                          setState(() {
+                            _errorMessage =
+                                'Failed to load ${widget.title} PDF: ${documentRef.resolveListenable().error}';
+                            _isLoading = false;
+                          });
+                        }
+                      },
+                    ),
                   ),
       ),
     );

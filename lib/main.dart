@@ -86,6 +86,8 @@ void main() {
 
     FirebaseMessaging.instance.getToken().then((token) {
       log('FCM token at startup: $token');
+    }).catchError((e) {
+      log('Error getting FCM token at startup: $e');
     });
 
     runApp(const MyApp());

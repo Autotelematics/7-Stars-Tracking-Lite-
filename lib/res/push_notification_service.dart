@@ -13,11 +13,15 @@ class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   bool _isTokenSubmitted = false;
   Future<String?> _getFcmTokenWithRetry() async {
-    for (int i = 0; i < 10; i++) {
-      String? token = await _fcm.getToken();
-      debugPrint('[PushNotificationService] Try $i: token=$token');
-      if (token!.isNotEmpty) return token;
-      await Future.delayed(const Duration(seconds: 1));
+    for (int i = 0; i < 5; i++) {
+      try {
+        String? token = await _fcm.getToken();
+        debugPrint('[PushNotificationService] Try $i: token=$token');
+        if (token != null && token.isNotEmpty) return token;
+      } catch (e) {
+        debugPrint('[PushNotificationService] Error getting FCM token on try $i: $e');
+      }
+      await Future.delayed(const Duration(seconds: 2));
     }
     return null;
   }

@@ -1,22 +1,31 @@
-import 'dart:io';
 import 'package:autotelematic_new_app/cubit/get_devices_list_cubit.dart';
 import 'package:autotelematic_new_app/model/user_signin_model.dart';
 import 'package:autotelematic_new_app/res/push_notification_service.dart';
 import 'package:autotelematic_new_app/utils/routes/routes_names.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_device_info_plus/flutter_device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> isRunningOnSimulator() async {
-  final deviceInfo = DeviceInfoPlugin();
-  if (Platform.isIOS) {
-    final iosInfo = await deviceInfo.iosInfo;
-    return !iosInfo.isPhysicalDevice;
-  } else if (Platform.isAndroid) {
-    final androidInfo = await deviceInfo.androidInfo;
-    return !androidInfo.isPhysicalDevice;
+  const deviceInfo = FlutterDeviceInfoPlus();
+  try {
+    final info = await deviceInfo.getDeviceInfo();
+    final os = info.operatingSystem.toLowerCase();
+    final model = info.model.toLowerCase();
+    final brand = info.brand.toLowerCase();
+    final manufacturer = info.manufacturer.toLowerCase();
+
+    if (os == 'ios') {
+      return model.contains('simulator') || info.deviceName.toLowerCase().contains('simulator');
+    } else if (os == 'android') {
+      return brand.contains('google') && (model.contains('sdk') || model.contains('emulator')) ||
+          manufacturer.contains('genymotion') ||
+          model.contains('google_sdk');
+    }
+  } catch (e) {
+    print("Error checking simulator: $e");
   }
   return false;
 }
@@ -49,7 +58,12 @@ class UserSessions {
       }
 
       // Centralized FCM submission!
-      await PushNotificationService().submitFcmTokenIfLoggedIn();
+      // We don't want FCM failures to log the user out, so we wrap it in a try-catch.
+      try {
+        await PushNotificationService().submitFcmTokenIfLoggedIn();
+      } catch (e) {
+        print("PushNotificationService Error: $e");
+      }
 
       if (!context.mounted) return;
 

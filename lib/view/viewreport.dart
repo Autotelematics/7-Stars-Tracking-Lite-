@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:pdfrx/pdfrx.dart';
 
 class ViewReportsScreen extends StatefulWidget {
   final String reportName;
@@ -227,17 +227,21 @@ class _ViewReportsScreenState extends State<ViewReportsScreen> {
                   return Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      SfPdfViewer.network(
-                        url,
-                        initialZoomLevel: 0,
-                        pageSpacing: 0,
-                        enableDoubleTapZooming: true,
-                        pageLayoutMode: PdfPageLayoutMode.continuous,
-                        onDocumentLoadFailed: (details) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to load PDF: ${details.description}')),
-                          );
-                        },
+                      PdfViewer.uri(
+                        Uri.parse(url),
+                        params: PdfViewerParams(
+                          onDocumentLoadFinished: (documentRef, succeeded) {
+                            if (!succeeded) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Failed to load PDF: ${documentRef.resolveListenable().error}',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ),
                       Positioned(
                         top: 3.h,

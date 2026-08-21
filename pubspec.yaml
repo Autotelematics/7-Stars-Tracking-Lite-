@@ -2,7 +2,7 @@ name: autotelematic_new_app
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 1.0.6+8
+version: 1.0.6+9
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
@@ -25,7 +25,7 @@ dependencies:
   equatable: ^2.0.7
   dio: ^5.8.0+1
   pretty_dio_logger: ^1.4.0
-  syncfusion_flutter_pdfviewer: ^33.2.13
+  pdfrx: ^2.4.7
   syncfusion_flutter_gauges: ^33.2.15
   fluster: ^1.2.0
   flutter_cache_manager: ^3.4.1
@@ -39,7 +39,7 @@ dependencies:
   provider: ^6.1.5
   animated_marker: ^0.3.1
   share_plus: ^13.3.0
-  device_info_plus: ^13.2.0
+  flutter_device_info_plus: ^0.7.1
   responsive_sizer: ^3.3.1
   flutter_svg: ^2.3.0
   geolocator: ^14.0.1
